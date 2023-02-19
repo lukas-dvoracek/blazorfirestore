@@ -1,0 +1,86 @@
+@page "/users"
+
+<!-- Injects the IJSRuntime service, which allows the component to call JavaScript functions -->
+@inject IJSRuntime JS
+
+<!-- Displays the title "Firebase" -->
+<h1> Firebase </h1>
+
+<!-- Input box to add a new user -->
+<div>
+    <!-- Binds the currentUser variable to the input box -->
+    <input @bind=@currentUser/>
+    <!-- Binds the AddUser method to the button -->
+    <button @onclick="AddUser">Add</button>
+</div>
+<br />
+
+<!-- Displays the list of users if isLoading is false -->
+@if (!isLoading)
+{
+    <!-- Loops through the userList -->
+    @foreach(var user in userList)
+    {
+        <div>
+            <!-- Displays the user's name -->
+            @user.UserName
+            <!-- Binds the DeleteUser method to the delete button -->
+            <button @onclick="()=>DeleteUser(user.Id!)"> Del</button>
+        </div>
+        <br/>
+    } 
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    // A list of User objects to store the users
+    private List<User> userList = new();
+    // A flag to indicate if the component is still loading
+    private bool isLoading = true;
+    // The name of the new user to add
+    private string? currentUser;
+
+    // Adds a new user to Firebase
+    private async Task AddUser()
+    {
+        // Invokes a JavaScript function to add the user to Firebase
+        await JS.InvokeVoidAsync("addUser", currentUser);
+        // Clears the input box
+        currentUser = null;
+        // Retrieves the updated list of users from Firebase
+        userList = await JS.InvokeAsync<List<User>>("getUsers");
+    }
+
+    // Deletes a user from Firebase
+    private async Task DeleteUser(string userId)
+    {
+        // Removes the user from the userList
+        userList = userList.Where(i => i.Id != userId).ToList();
+        // Invokes a JavaScript function to delete the user from Firebase
+        await JS.InvokeVoidAsync("deleteUser", userId);
+    }
+
+    // Retrieves the list of users from Firebase after the component has rendered
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Retrieves the list of users from Firebase
+            userList = await JS.InvokeAsync<List<User>>("getUsers");
+            // Sets isLoading to false to indicate that the component has finished loading
+            isLoading = false;
+            // Forces the component to re-render
+            StateHasChanged();
+        }
+    }
+
+    // A class to represent a user
+    private class User
+    {
+        public string? Id { get; set; }
+        public string? UserName { get; set; }
+    }
+}
