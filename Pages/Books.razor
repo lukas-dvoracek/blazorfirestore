@@ -1,0 +1,23 @@
+﻿@page "/books"
+@using Services
+@using global::Services
+@inject FirestoreService FirestoreService
+@using static blazorfirestore.Services.Objects
+
+<h1>Knihy</h1>
+
+<ul>
+    @foreach (var book in books)
+    {
+        <li>@book.Title – Autor: @book.AuthorName</li>
+    }
+</ul>
+
+@code {
+    private List<Book> books = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await FirestoreService.GetBooksAsync();
+    }
+}

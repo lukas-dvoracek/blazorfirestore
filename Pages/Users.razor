@@ -1,15 +1,19 @@
 @page "/users"
+@using global::Services
+@inject FirestoreService FirestoreService
+@using static blazorfirestore.Services.Objects
 
 <!-- Injects the IJSRuntime service, which allows the component to call JavaScript functions -->
 @inject IJSRuntime JS
 
 <!-- Displays the title "Firebase" -->
-<h1> Firebase </h1>
+<h1> Uživatelé </h1>
 
 <!-- Input box to add a new user -->
 <div>
     <!-- Binds the currentUser variable to the input box -->
-    <input @bind=@currentUser/>
+    <input @bind=@currentUser placeholder="User Name" />
+    <input @bind=@currentUserRole placeholder="Role" />
     <!-- Binds the AddUser method to the button -->
     <button @onclick="AddUser">Add</button>
 </div>
@@ -23,7 +27,7 @@
     {
         <div>
             <!-- Displays the user's name -->
-            @user.UserName
+            @user.UserName - @user.UserRole
             <!-- Binds the DeleteUser method to the delete button -->
             <button @onclick="()=>DeleteUser(user.Id!)"> Del</button>
         </div>
@@ -42,25 +46,27 @@ else
     private bool isLoading = true;
     // The name of the new user to add
     private string? currentUser;
+    private string? currentUserRole;
 
     // Adds a new user to Firebase
     private async Task AddUser()
     {
+        await FirestoreService.AddUserAsync(currentUser, currentUserRole);
         // Invokes a JavaScript function to add the user to Firebase
-        await JS.InvokeVoidAsync("addUser", currentUser);
-        // Clears the input box
-        currentUser = null;
         // Retrieves the updated list of users from Firebase
-        userList = await JS.InvokeAsync<List<User>>("getUsers");
+        userList = await FirestoreService.GetUsersAsync();
+        // userList = await JS.InvokeAsync<List<User>>("getUsers");
     }
 
     // Deletes a user from Firebase
     private async Task DeleteUser(string userId)
     {
+        await FirestoreService.DeleteUserAsync(userId);
+        await FirestoreService.GetUsersAsync();
         // Removes the user from the userList
-        userList = userList.Where(i => i.Id != userId).ToList();
+        // userList = userList.Where(i => i.Id != userId).ToList();
         // Invokes a JavaScript function to delete the user from Firebase
-        await JS.InvokeVoidAsync("deleteUser", userId);
+        // await JS.InvokeVoidAsync("deleteUser", userId);
     }
 
     // Retrieves the list of users from Firebase after the component has rendered
@@ -68,8 +74,9 @@ else
     {
         if (firstRender)
         {
+            userList = await FirestoreService.GetUsersAsync();
             // Retrieves the list of users from Firebase
-            userList = await JS.InvokeAsync<List<User>>("getUsers");
+            // userList = await JS.InvokeAsync<List<User>>("getUsers");
             // Sets isLoading to false to indicate that the component has finished loading
             isLoading = false;
             // Forces the component to re-render
@@ -77,10 +84,4 @@ else
         }
     }
 
-    // A class to represent a user
-    private class User
-    {
-        public string? Id { get; set; }
-        public string? UserName { get; set; }
-    }
 }
