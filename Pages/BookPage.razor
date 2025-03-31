@@ -6,13 +6,12 @@
 @inject FirestoreService FirestoreService
 @using static blazorfirestore.Services.Objects
 
-<h3>Detail knihy</h3>
 
 @if (book != null)
 {
-    <p><strong>Název:</strong> @book.Title</p>
+    <h3>@book.Title</h3>
     <p><strong>Autor:</strong> @book.AuthorName</p>
-    <p><strong>Obsah:</strong> @book.Content</p>
+    <p>@book.Content</p>
 }
 else
 {
