@@ -4,6 +4,7 @@
         collection,
         addDoc,
         getDocs,
+        getDoc,
         deleteDoc,
         doc,
         query, 
@@ -87,13 +88,60 @@
             const posts = await getDocs(q);
             //const querySnapshot = await getDocs(collection(db, "posts"));
             let dataArray = posts.docs.map((doc) => ({
-                id: doc.id,
-                title: doc.get("Title"),
-                authorId: doc.get("user") // Přidáme authorId
+                Id: doc.id,
+                Title: doc.get("Title"),
+                AuthorId: doc.get("user"), // Přidáme authorId
+                Content: doc.get("Content")
             }));
             return dataArray;
         } catch (e) {
             console.error("Chyba při načítání knih: ", e);
         }
         return null;
+    };
+
+    // funkce pro zobrazení seznamu knih/postů
+    window.getBookById = async (bookId) => {
+        try {
+            const docRef = doc(db, "posts", bookId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                let book = {
+                    Id: docSnap.id,
+                    Title: docSnap.get("Title"),
+                    AuthorId: docSnap.get("user"),
+                    //published: docSnap.get("published"),
+                    Content: docSnap.get("Content"),
+                };
+                console.log("Firebase response:", book);  // 🛠️ Debugging
+                return book;
+            } else {
+                console.error("Kniha neexistuje");
+                return null;
+            }
+        } catch (e) {
+            console.error("Chyba při načítání knihy: ", e);
+            return null;
+        }
+    };
+    // 📚 Získání všech knih podle uživatele
+    window.getBookByUserId = async (userId) => {
+        try {
+            const q = query(collection(db, "posts"), where("user", "==", userId));
+            const querySnapshot = await getDocs(q);
+
+            let books = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                title: doc.get("Title"),
+                authorId: doc.get("user"),
+                published: doc.get("published"),
+                content: docSnap.get("Content"),
+            }));
+
+            return books;
+        } catch (e) {
+            console.error("Chyba při načítání knih uživatele:", e);
+            return null;
+        }
     };

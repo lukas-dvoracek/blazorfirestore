@@ -1,4 +1,6 @@
-﻿namespace blazorfirestore.Services
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace blazorfirestore.Services
 {
     public class Objects
     {
@@ -11,10 +13,13 @@
         }
         public class Book
         {
-            public string Id { get; set; }
-            public string Title { get; set; }
-            public string AuthorId { get; set; } // ID autora
-            public string AuthorName { get; set; } // Jméno autora
-        }
+            public string? Id { get; set; }
+            public string? Title { get; set; }
+            public string? AuthorId { get; set; } // ID autora
+            public string? AuthorName { get; set; } // Jméno autora
+            public string? Genre { get; set; }
+			public string? Content { get; set; }
+			//public TimestampAttribute? DatePublished { get; set; }
+		}
     }
 }

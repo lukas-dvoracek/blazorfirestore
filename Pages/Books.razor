@@ -9,7 +9,7 @@
 <ul>
     @foreach (var book in books)
     {
-        <li>@book.Title – Autor: @book.AuthorName</li>
+        <li><a href="@($"book/{book.Id}")">@book.Title</a> – Autor: @book.AuthorName</li>
     }
 </ul>
 

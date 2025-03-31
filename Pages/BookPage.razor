@@ -1,5 +1,32 @@
-﻿<h3>Book</h3>
+﻿@page "/book/{id}"
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@using Services
+@using global::Services
+@inject FirestoreService FirestoreService
+@using static blazorfirestore.Services.Objects
+
+<h3>Detail knihy</h3>
+
+@if (book != null)
+{
+    <p><strong>Název:</strong> @book.Title</p>
+    <p><strong>Autor:</strong> @book.AuthorName</p>
+    <p><strong>Obsah:</strong> @book.Content</p>
+}
+else
+{
+    <p>Načítání...</p>
+}
 
 @code {
+    [Parameter] public string Id { get; set; }
+    private Book book;
+
+    protected override async Task OnInitializedAsync()
+    {
+		book = await FirestoreService.GetBookByIdAsync(Id);
+        // book = await JSRuntime.InvokeAsync<Book>("getBookById", Id);
+    }
 
 }
