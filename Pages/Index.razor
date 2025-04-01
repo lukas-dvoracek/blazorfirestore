@@ -8,7 +8,7 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-<h3>WYSIWYG Editor</h3>
+<h3>WYSIWYG Editor Quill</h3>
 <div id="toolbar">
     <button class="ql-bold"></button>
     <button class="ql-italic"></button>
@@ -21,6 +21,14 @@ Welcome to your new app.
 <div>@(new MarkupString(text))</div>
 <pre>@text</pre>
 
+
+
+<h3>TinyMCE v Blazor WASM</h3>
+
+<textarea id="tinymceEditor"></textarea>
+
+<TinyMCE.Blazor.Editor ApiKey="s1lzo74rqol5ydgb6zmh9fw6gn056acll3az5qu8r0rb5221" />
+
 @code {
     private string text = "<p>Ahoj světe!</p>";
 
@@ -28,4 +36,14 @@ Welcome to your new app.
     {
         text = newText;
     }
+
+    // [Inject] IJSRuntime JS { get; set; }
+
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender)
+    //     {
+    //         await JS.InvokeVoidAsync("initTinyMCE", "tinymceEditor");
+    //     }
+    // }
 }
