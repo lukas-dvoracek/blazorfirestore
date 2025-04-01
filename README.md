@@ -1,3 +1,6 @@
-.NET 9
+Blazor WASM Firebase+Firestore example
+with:
+Quill editor - https://quilljs.com/docs/modules/toolbar
+FontAwesome
 
-Quill editor: https://quilljs.com/docs/modules/toolbar
+(.NET 9)
