@@ -1,0 +1,32 @@
+﻿@inject IJSRuntime JS
+
+<div id="@EditorId" style="height: 300px;"></div>
+
+<textarea @bind="Content" style="display:none"></textarea>
+
+@code {
+    private string EditorId = "editor-" + Guid.NewGuid().ToString();
+    [Parameter] public string Content { get; set; }
+    [Parameter] public EventCallback<string> ContentChanged { get; set; }
+
+    private IJSObjectReference quillEditor;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            quillEditor = await JS.InvokeAsync<IJSObjectReference>("initQuill", EditorId, "toolbar");
+            await JS.InvokeVoidAsync("setQuillContent", EditorId, Content);
+
+            // Synchronizace obsahu při změně
+            await JS.InvokeVoidAsync("bindQuillChange", EditorId, DotNetObjectReference.Create(this));
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnQuillContentChanged(string newValue)
+    {
+        Content = newValue;
+        await ContentChanged.InvokeAsync(Content);
+    }
+}

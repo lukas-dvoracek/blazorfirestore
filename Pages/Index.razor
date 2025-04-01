@@ -7,3 +7,25 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<h3>WYSIWYG Editor</h3>
+<div id="toolbar">
+    <button class="ql-bold"></button>
+    <button class="ql-italic"></button>
+    <button class="ql-underline"></button>
+    <button class="ql-strike"></button>
+</div>
+<QuillEditor Content="@text" ContentChanged="OnTextChanged" />
+
+<p>Aktuální obsah:</p>
+<div>@(new MarkupString(text))</div>
+<pre>@text</pre>
+
+@code {
+    private string text = "<p>Ahoj světe!</p>";
+
+    private void OnTextChanged(string newText)
+    {
+        text = newText;
+    }
+}
