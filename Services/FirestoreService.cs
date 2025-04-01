@@ -1,8 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using blazorfirestore.Pages;
 using Microsoft.JSInterop;
-using static blazorfirestore.Services.Objects;
+using static global::Shared.Objects;
 
 namespace Services
 {
@@ -27,7 +26,7 @@ namespace Services
 
         public async Task<List<User>> GetUsersAsync()
         {
-            var users = await _jsRuntime.InvokeAsync<User[]>("window.getUsers");
+            var users = await _jsRuntime.InvokeAsync<User[]>("getUsers");
             return users.ToList();
         }
 
@@ -83,6 +82,13 @@ namespace Services
 				}
 			}
 			return bookById;
+		}
+		// 📖 Získání uživatele podle jeho ID
+		public async Task<User> GetUserByIdAsync(string userId)
+		{
+			var userById = await _jsRuntime.InvokeAsync<User>("getUserById", userId);
+			//var users = await GetUsersDictionaryAsync(); // Načti všechny knihy tohoto uživatele
+			return userById;
 		}
 
 		// 📚 Získání všech knih podle uživatele

@@ -1,0 +1,48 @@
+﻿@page "/login"
+@using Services
+@inject FirebaseAuthService AuthService
+@inject NavigationManager Navigation
+
+<h3>Přihlášení</h3>
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p style="color: red">@ErrorMessage</p>
+}
+
+<input @bind="Email" placeholder="Email" />
+<input @bind="Password" type="password" placeholder="Heslo" />
+<button @onclick="LoginIn">Přihlásit</button>
+<button @onclick="Register">Registrovat</button>
+
+@code {
+    private string Email { get; set; }
+    private string Password { get; set; }
+    private string ErrorMessage { get; set; }
+
+    private async Task LoginIn()
+    {
+        var userId = await AuthService.LoginUser(Email, Password);
+        if (userId != null)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            ErrorMessage = "Přihlášení selhalo!";
+        }
+    }
+
+    private async Task Register()
+    {
+        var userId = await AuthService.RegisterUser(Email, Password);
+        if (userId != null)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            ErrorMessage = "Registrace selhala!";
+        }
+    }
+}

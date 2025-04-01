@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace blazorfirestore.Services
+namespace Shared
 {
     public class Objects
     {

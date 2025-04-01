@@ -1,4 +1,29 @@
-﻿<h3>UserPage</h3>
+﻿@page "/user/{id}"
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@using Services
+@using static global::Shared.Objects
+@inject FirestoreService FirestoreService
+
+
+@if (user != null)
+{
+    <h3>@user.UserName</h3>
+    <p>@user.UserRole</p>
+    @* <p>seznam příspěvků uživatele:</p> *@
+}
+else
+{
+    <p>Načítání...</p>
+}
 
 @code {
+    [Parameter] public string Id { get; set; }
+    private User user;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await FirestoreService.GetUserByIdAsync(Id);
+    }
+
 }

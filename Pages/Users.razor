@@ -1,7 +1,7 @@
 @page "/users"
 @using global::Services
+@using static global::Shared.Objects
 @inject FirestoreService FirestoreService
-@using static blazorfirestore.Services.Objects
 
 <!-- Injects the IJSRuntime service, which allows the component to call JavaScript functions -->
 @inject IJSRuntime JS
@@ -27,7 +27,7 @@
     {
         <div>
             <!-- Displays the user's name -->
-            @user.UserName - @user.UserRole
+            <a href="@($"user/{user.Id}")">@user.UserName</a> - @user.UserRole
             <!-- Binds the DeleteUser method to the delete button -->
             <button @onclick="()=>DeleteUser(user.Id!)"> Del</button>
         </div>

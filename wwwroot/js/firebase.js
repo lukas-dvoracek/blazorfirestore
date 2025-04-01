@@ -22,14 +22,14 @@
       //    messagingSenderId: "163844964316",
       //    appId: "1:163844964316:web:e85ac73ba9cbb150391919",
       //};
-      const firebaseConfig = {
+    const firebaseConfig = {
         apiKey: "AIzaSyBMlqNt1pHk9PCO8O01nqIGvYMJ95oAxWI",
-    authDomain: "webapp-8dc15.firebaseapp.com",
-    projectId: "webapp-8dc15",
-    storageBucket: "webapp-8dc15.appspot.com",
-    messagingSenderId: "533382046307",
-    appId: "1:533382046307:web:a85f34929f5ce60ced8e56",
-      };
+        authDomain: "webapp-8dc15.firebaseapp.com",
+        projectId: "webapp-8dc15",
+        storageBucket: "webapp-8dc15.appspot.com",
+        messagingSenderId: "533382046307",
+        appId: "1:533382046307:web:a85f34929f5ce60ced8e56",
+    };
 
     let db; // Definujeme globálně
 
@@ -70,6 +70,32 @@
         return null;
     };
 
+    // Funkce pro zobrazení uživatele dle id
+    window.getUserById = async (userId) => {
+        try {
+            const docRef = doc(db, "users", userId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                let user = {
+                    Id: docSnap.id,
+                    UserName: docSnap.get("DisplayName"),
+                    UserRole: docSnap.get("Role"),
+                    //Email: docSnap.get("Email"),
+                    //RegisteredAt: docSnap.get("RegisteredAt"),
+                };
+                console.log("Firebase response:", user);  // 🛠️ Debugging
+                return user;
+            } else {
+                console.error("Uživatel neexistuje");
+                return null;
+            }
+        } catch (e) {
+            console.error("Chyba při načítání uživatele: ", e);
+            return null;
+        }
+    };
+
     // Define a function to delete a user from the Firestore database
     window.deleteUser = async (userId) => {
       try {
@@ -100,7 +126,7 @@
         return null;
     };
 
-    // funkce pro zobrazení seznamu knih/postů
+    // funkce pro zobrazení knihy/postu dle jeho id
     window.getBookById = async (bookId) => {
         try {
             const docRef = doc(db, "posts", bookId);
