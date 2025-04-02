@@ -475,3 +475,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# API keys
+appsettings.json
+nastav-apikeys.conf

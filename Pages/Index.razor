@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using Services
+@using global::Shared
+@inject KeyService KeyService
 
 <PageTitle>Index</PageTitle>
 
@@ -8,18 +11,31 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-<h3>WYSIWYG Editor Quill</h3>
-<div id="toolbar">
-    <button class="ql-bold"></button>
-    <button class="ql-italic"></button>
-    <button class="ql-underline"></button>
-    <button class="ql-strike"></button>
-</div>
-<QuillEditor Content="@text" ContentChanged="OnTextChanged" />
+<h3>API Klíče</h3>
 
-<p>Aktuální obsah:</p>
-<div>@(new MarkupString(text))</div>
-<pre>@text</pre>
+@if (keys == null)
+{
+    <p>Načítám klíče...</p>
+}
+else
+{
+    <p>Firebase API Key: @keys.FB_API_KEY</p>
+    <p>TinyMCE Key: @keys.TINYMCE_API_KEY</p>
+}
+
+
+@* <h3>WYSIWYG Editor Quill</h3> *@
+@* <div id="toolbar"> *@
+@*     <button class="ql-bold"></button> *@
+@*     <button class="ql-italic"></button> *@
+@*     <button class="ql-underline"></button> *@
+@*     <button class="ql-strike"></button> *@
+@* </div> *@
+@* <QuillEditor Content="@text" ContentChanged="OnTextChanged" /> *@
+
+@* <p>Aktuální obsah:</p> *@
+@* <div>@(new MarkupString(text))</div> *@
+@* <pre>@text</pre> *@
 
 
 
@@ -27,9 +43,10 @@ Welcome to your new app.
 
 <textarea id="tinymceEditor"></textarea>
 
-<TinyMCE.Blazor.Editor ApiKey="s1lzo74rqol5ydgb6zmh9fw6gn056acll3az5qu8r0rb5221" />
+@* <TinyMCE.Blazor.Editor ApiKey=doplnitApiKey /> *@
 
 @code {
+    private ApiKeys? keys;
     private string text = "<p>Ahoj světe!</p>";
 
     private void OnTextChanged(string newText)
@@ -37,13 +54,18 @@ Welcome to your new app.
         text = newText;
     }
 
-    // [Inject] IJSRuntime JS { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        keys = await KeyService.GetKeysAsync();
+    }
 
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (firstRender)
-    //     {
-    //         await JS.InvokeVoidAsync("initTinyMCE", "tinymceEditor");
-    //     }
-    // }
+    [Inject] IJSRuntime JS { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initTinyMCE", "tinymceEditor", @keys.TINYMCE_API_KEY);
+        }
+    }
 }

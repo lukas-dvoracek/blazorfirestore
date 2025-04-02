@@ -13,15 +13,6 @@
     } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
     // Firebase configuration details
-      // replace this configuration with your own configuration details
-      //const firebaseConfig = {
-      //    apiKey: "AIzaSyB4ftsDO2tLVEi69rxACNcLlNLwjUw9_LY",
-      //    authDomain: "blazorstore-52dcb.firebaseapp.com",
-      //    projectId: "blazorstore-52dcb",
-      //    storageBucket: "blazorstore-52dcb.appspot.com",
-      //    messagingSenderId: "163844964316",
-      //    appId: "1:163844964316:web:e85ac73ba9cbb150391919",
-      //};
     const firebaseConfig = {
         apiKey: "AIzaSyBMlqNt1pHk9PCO8O01nqIGvYMJ95oAxWI",
         authDomain: "webapp-8dc15.firebaseapp.com",
