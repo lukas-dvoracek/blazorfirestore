@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using Services
+@using TinyMCE.Blazor
 @using global::Shared
 @inject KeyService KeyService
 
@@ -19,8 +20,10 @@ Welcome to your new app.
 }
 else
 {
-    <p>Firebase API Key: @keys.FB_API_KEY</p>
-    <p>TinyMCE Key: @keys.TINYMCE_API_KEY</p>
+    @* <p>Firebase API Key: @keys.FB_API_KEY</p> *@
+    @* <p>TinyMCE Key: @keys.TINYMCE_API_KEY</p> *@
+    <p>Firebase API Key: načteno</p>
+    <p>TinyMCE Key: načteno</p>
 }
 
 
@@ -40,14 +43,21 @@ else
 
 
 <h3>TinyMCE v Blazor WASM</h3>
-
-<textarea id="tinymceEditor"></textarea>
+@if (keys != null)
+{
+    <Editor Id="tinymceEditor" ApiKey="@keys.TINYMCE_API_KEY" />
+}
+else
+{
+    <p>Načítání editoru...</p>
+}
 
 @* <TinyMCE.Blazor.Editor ApiKey=doplnitApiKey /> *@
 
 @code {
     private ApiKeys? keys;
     private string text = "<p>Ahoj světe!</p>";
+    private bool keysLoaded = false;
 
     private void OnTextChanged(string newText)
     {
@@ -57,15 +67,18 @@ else
     protected override async Task OnInitializedAsync()
     {
         keys = await KeyService.GetKeysAsync();
+        keysLoaded = true;
+        StateHasChanged(); // Přinutí komponentu k novému renderu
     }
 
     [Inject] IJSRuntime JS { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JS.InvokeVoidAsync("initTinyMCE", "tinymceEditor", @keys.TINYMCE_API_KEY);
-        }
-    }
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (keysLoaded && keys != null)
+    //     //if (firstRender)
+    //     {
+    //         await JS.InvokeVoidAsync("initTinyMCE", "tinymceEditor", @keys.TINYMCE_API_KEY);
+    //     }
+    // }
 }
