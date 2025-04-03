@@ -1,4 +1,6 @@
-﻿console.log("quill.js načten!");
+﻿// NEPOUŽÍVAT
+
+console.log("quill.js načten!");
 
 window.initQuill = (editorId) => {
     console.log(`🖋️ Hledám element: #${editorId}`);
