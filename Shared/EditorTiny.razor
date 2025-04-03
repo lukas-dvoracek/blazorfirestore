@@ -1,0 +1,69 @@
+﻿@using Services
+@using TinyMCE.Blazor
+@using global::Shared
+@inject KeyService KeyService
+
+<h3>API Klíče</h3>
+
+@if (keys == null)
+{
+    <p>Načítám klíče...</p>
+}
+else
+{
+    @* <p>Firebase API Key: @keys.FB_API_KEY</p> *@
+    @* <p>TinyMCE Key: @keys.TINYMCE_API_KEY</p> *@
+    <p>Firebase API Key: načteno</p>
+    <p>TinyMCE Key: načteno</p>
+}
+
+
+<h3>TinyMCE v Blazor WASM</h3>
+<a href="https://www.tiny.cloud/docs/tinymce/latest/blazor-ref/#component-binding">Nastavení TinyMCE v Blazoru</a>
+<a href="https://www.tiny.cloud/docs/tinymce/latest/customize-ui/">Změna vzhledu</a>
+
+@if (keys != null)
+{
+    <Editor @bind-Value="Content"
+            Id="tinymceEditor"
+            ApiKey="@keys.TINYMCE_API_KEY"
+            Inline=false
+            CloudChannel="7"
+            Disable=false
+            ClassName="tinymce-wrapper"
+            JsConfSrc="config"
+            @* Conf="@yourConf" *@
+            @* LicenseKey="your-license-key" *@
+            @* ScriptSrc="config" *@ />
+
+    <button @onclick="SaveContent">Náhled</button>
+}
+else
+{
+    <p>Načítání editoru...</p>
+}
+
+
+@code {
+
+    private ApiKeys? keys;
+    private string text = "<p>Ahoj světe!</p>";
+    private bool keysLoaded = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        keys = await KeyService.GetKeysAsync();
+        keysLoaded = true;
+        StateHasChanged(); // Přinutí komponentu k novému renderu
+    }
+
+    [Parameter] public string? Content { get; set; }
+    [Parameter] public EventCallback<string> OnContentChanged { get; set; }
+    
+    private void SaveContent()
+    {
+        OnContentChanged.InvokeAsync(Content);
+    }
+
+}

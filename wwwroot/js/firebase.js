@@ -143,17 +143,22 @@
         }
     };
     // 📚 Získání všech knih podle uživatele
-    window.getBookByUserId = async (userId) => {
+    window.getBooksByUserId = async (userId) => {
         try {
-            const q = query(collection(db, "posts"), where("user", "==", userId));
+            const q = query(
+                collection(db, "posts"),
+                where("user", "==", userId),
+                where("published", "==", true) // Přidána podmínka
+            );
+
             const querySnapshot = await getDocs(q);
 
             let books = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                title: doc.get("Title"),
-                authorId: doc.get("user"),
-                published: doc.get("published"),
-                content: docSnap.get("Content"),
+                Id: doc.id,
+                Title: doc.get("Title"),
+                AuthorId: doc.get("user"),
+                //published: doc.get("published"),
+                Content: doc.get("Content"),
             }));
 
             return books;

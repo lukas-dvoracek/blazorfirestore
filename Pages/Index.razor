@@ -12,19 +12,15 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-<h3>API Klíče</h3>
 
-@if (keys == null)
-{
-    <p>Načítám klíče...</p>
-}
-else
-{
-    @* <p>Firebase API Key: @keys.FB_API_KEY</p> *@
-    @* <p>TinyMCE Key: @keys.TINYMCE_API_KEY</p> *@
-    <p>Firebase API Key: načteno</p>
-    <p>TinyMCE Key: načteno</p>
-}
+<EditorTiny Content=@content OnContentChanged=HandleContentChange></EditorTiny>
+
+@* <textarea Id="tinymceEditor"></textarea> *@
+<!-- Zobrazení aktuálního obsahu -->
+<p>@text</p>
+<div>@(new MarkupString(text))</div>
+<pre>@text</pre>
+<p>@(new MarkupString(plainText))</p>
 
 
 @* <h3>WYSIWYG Editor Quill</h3> *@
@@ -41,38 +37,6 @@ else
 @* <pre>@text</pre> *@
 
 
-<h3>TinyMCE v Blazor WASM</h3>
-<a href="https://www.tiny.cloud/docs/tinymce/latest/blazor-ref/#component-binding">Nastavení TinyMCE v Blazoru</a>
-<a href="https://www.tiny.cloud/docs/tinymce/latest/customize-ui/">Změna vzhledu</a>
-
- @if (keys != null)
-{
-    <Editor 
-        @bind-Value="content" 
-        Id="tinymceEditor" 
-        ApiKey="@keys.TINYMCE_API_KEY"   
-        Inline=false
-        CloudChannel="7"
-        Disable=false
-        ClassName="tinymce-wrapper"
-        JsConfSrc="config"
-        @* Conf="@yourConf" *@
-        @* LicenseKey="your-license-key" *@
-        @* ScriptSrc="config" *@
-    />
-
-    <button @onclick="SaveContent">Náhled</button>
-    @* <textarea Id="tinymceEditor"></textarea> *@
-    <!-- Zobrazení aktuálního obsahu -->
-    <p>@text</p> 
-    <div>@(new MarkupString(text))</div>
-    <pre>@text</pre>
-    <p>@(new MarkupString(plainText))</p>
-}
-else
-{
-    <p>Načítání editoru...</p>
-}
 
 @code {
     private ApiKeys? keys;
@@ -112,9 +76,16 @@ else
         // Předpokládáme, že text je již upravený ve "text" proměnné
         // await SomeService.SaveContentAsync(text);  // Uložení do databáze nebo jiného úložiště        
         // var content = await JS.InvokeAsync<string>("getTinyMCEContent", "tinymceEditor");
-        text = content;
+        text = @content;
         await ConvertToPlainText(text);
 
+    }
+
+    private async Task HandleContentChange(string newContent)
+    {
+        text = newContent;
+        content = text;
+        await ConvertToPlainText(text);
     }
 
     [Inject] IJSRuntime JS { get; set; }

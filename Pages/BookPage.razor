@@ -8,9 +8,10 @@
 
 @if (book != null)
 {
-    <h3>@book.Title</h3>
+    <h1>@book.Title</h1>
     <p><strong>Autor:</strong> @book.AuthorName</p>
-    <p>@book.Content</p>
+    <div>@(new MarkupString(@book.Content))</div>
+    <EditorTiny></EditorTiny>
 }
 else
 {

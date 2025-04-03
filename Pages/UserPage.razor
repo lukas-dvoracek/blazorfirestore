@@ -8,9 +8,23 @@
 
 @if (user != null)
 {
-    <h3>@user.UserName</h3>
+    <h1>@user.UserName</h1>
     <p>@user.UserRole</p>
     @* <p>seznam příspěvků uživatele:</p> *@
+}
+else
+{
+    <p>Načítání...</p>
+}
+@if (books != null)
+{
+    <h4>seznam příspěvků uživatele:</h4> 
+    <ul>
+    @foreach (var book in books)
+        {
+            <li><a href="@($"book/{book.Id}")">@book.Title</a></li>
+        }
+    </ul>
 }
 else
 {
@@ -20,10 +34,14 @@ else
 @code {
     [Parameter] public string Id { get; set; }
     private User user;
+    private List<Book> books = new();
+
+        
 
     protected override async Task OnInitializedAsync()
     {
         user = await FirestoreService.GetUserByIdAsync(Id);
+        books = await FirestoreService.GetBooksByUserIdAsync(Id);
     }
 
 }
