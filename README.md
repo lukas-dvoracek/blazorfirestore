@@ -1,6 +1,11 @@
+forked from sammychinedu2ky/blazorfirestore
+
 Blazor WASM Firebase+Firestore example
+
 with:
-Quill editor - https://quilljs.com/docs/modules/toolbar
+
+TinyMCE
+
 FontAwesome
 
 (.NET 9)
