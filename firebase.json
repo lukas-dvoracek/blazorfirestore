@@ -11,7 +11,7 @@
     }
   ],
   "hosting": {
-    "public": "bin/Release/net9.0/publish/wwwroot",
+    "public": "bin/Release/net9.0/browser-wasm/publish/wwwroot",
     "ignore": [
       "firebase.json",
       "**/.*",
