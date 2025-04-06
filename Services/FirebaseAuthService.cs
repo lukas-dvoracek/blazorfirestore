@@ -20,7 +20,7 @@ namespace Services
 
 			var config = new FirebaseAuthConfig
 			{
-				ApiKey = Environment.GetEnvironmentVariable("APIKey"),
+				ApiKey = Environment.GetEnvironmentVariable("FBAPIKey"),
 				AuthDomain = "webapp-8dc15.firebaseapp.com",
 				Providers = new FirebaseAuthProvider[]
 				{

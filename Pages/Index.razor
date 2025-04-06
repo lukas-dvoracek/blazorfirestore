@@ -40,8 +40,8 @@ Welcome to your new app.
 
 @code {
     private ApiKeys? keys;
-    private string text = "<p>Ahoj světe!</p>";
     private bool keysLoaded = false;
+    private string text = "<p>Ahoj světe!</p>";
     private string content = "<p>Hello world</p>";
     private string plainText = "";
 
@@ -53,6 +53,7 @@ Welcome to your new app.
     protected override async Task OnInitializedAsync()
     {
         keys = await KeyService.GetKeysAsync();
+        Environment.SetEnvironmentVariable("FBAPIKey", keys.FB_API_KEY);
         keysLoaded = true;
         StateHasChanged(); // Přinutí komponentu k novému renderu
     }

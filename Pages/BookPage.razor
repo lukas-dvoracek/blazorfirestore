@@ -10,22 +10,66 @@
 {
     <h1>@book.Title</h1>
     <p><strong>Autor:</strong> @book.AuthorName</p>
-    <div>@(new MarkupString(@book.Content))</div>
-    <EditorTiny></EditorTiny>
+
+    @if (!IsEditing)
+    {
+        <div>@(new MarkupString(@book.Content))</div>
+        <button @onclick="() => EditContent(true)">Editovat</button>
+    }
+    else
+    {
+        <EditorTiny Content=@content OnContentChanged=HandleContentChange OnCancel=HandleCancel></EditorTiny>
+    }
+
 }
 else
 {
     <p>Načítání...</p>
 }
 
+
 @code {
     [Parameter] public string Id { get; set; }
     private Book book;
 
+    private string text = "<p>Ahoj světe!</p>";
+    private string content = "<p>Hello world</p>";
+    private string plainText = "";
+    private bool IsEditing = false;
+    [Inject] IJSRuntime JS { get; set; }
+    [Parameter] public string? Content { get; set; }
+    [Parameter] public EventCallback<string> OnContentChanged { get; set; }
+
+
     protected override async Task OnInitializedAsync()
     {
-		book = await FirestoreService.GetBookByIdAsync(Id);
+        book = await FirestoreService.GetBookByIdAsync(Id);
+        content = @book.Content;
         // book = await JSRuntime.InvokeAsync<Book>("getBookById", Id);
+    }
+
+    private async Task ConvertToPlainText(string text)
+    {
+        plainText = await JS.InvokeAsync<string>("stripHtml", text);
+    }
+
+    // dát  do BookEditPage
+    private async Task HandleContentChange(string newContent)
+    {
+        text = newContent;
+        content = text;
+        await ConvertToPlainText(text);
+    }
+    private async Task HandleCancel()
+    {
+        EditContent(false);
+    }    
+
+    private void EditContent(Boolean editing = true) => IsEditing = editing;
+
+    private void SaveContent()
+    {
+        OnContentChanged.InvokeAsync(Content);
     }
 
 }

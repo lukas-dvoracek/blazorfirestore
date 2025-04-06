@@ -22,8 +22,11 @@ else
 <a href="https://www.tiny.cloud/docs/tinymce/latest/blazor-ref/#component-binding">Nastavení TinyMCE v Blazoru</a>
 <a href="https://www.tiny.cloud/docs/tinymce/latest/customize-ui/">Změna vzhledu</a>
 
+
+
 @if (keys != null)
 {
+    <div class="editor" id="left">
     <Editor @bind-Value="Content"
             Id="tinymceEditor"
             ApiKey="@keys.TINYMCE_API_KEY"
@@ -35,8 +38,13 @@ else
             @* Conf="@yourConf" *@
             @* LicenseKey="your-license-key" *@
             @* ScriptSrc="config" *@ />
-
+    </div>
+    <div class="editor" id="right">
+        @* sem přijde náhled obsahu*@
+    </div>
     <button @onclick="SaveContent">Náhled</button>
+    <button @onclick="SaveContent">Uložit</button>
+    <button @onclick="CancelEdit">Zrušit editaci</button>
 }
 else
 {
@@ -47,7 +55,7 @@ else
 @code {
 
     private ApiKeys? keys;
-    private string text = "<p>Ahoj světe!</p>";
+    // private string text = "<p>Ahoj světe!</p>";
     private bool keysLoaded = false;
 
 
@@ -60,10 +68,16 @@ else
 
     [Parameter] public string? Content { get; set; }
     [Parameter] public EventCallback<string> OnContentChanged { get; set; }
-    
+    [Parameter] public EventCallback<Boolean> OnCancel { get; set; }
+
     private void SaveContent()
     {
         OnContentChanged.InvokeAsync(Content);
+    }
+
+    private void CancelEdit()
+    {
+        OnCancel.InvokeAsync(true);
     }
 
 }
