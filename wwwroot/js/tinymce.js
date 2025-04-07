@@ -25,6 +25,12 @@ window.getTinyMCEContent = function (editorId) {
 */
 window.config = {
     height: 300,
+    editor_selector: "tinymceEditor",
     language: 'cs',
-    toolbar: 'undo redo | bold italic'
+    toolbar: 'undo redo | bold italic',
+    promotion: false,
+    //skin: 'oxide-dark',
+    //content_css: 'dark'
+    skin: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide'),
+    content_css: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default')
 };

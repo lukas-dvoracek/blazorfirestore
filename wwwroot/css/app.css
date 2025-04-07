@@ -99,3 +99,36 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+
+.button-minimal {
+    background-color: transparent;
+    border: 2px solid #4a4a4a;
+    color: #4a4a4a;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+    .button-minimal:hover {
+        background-color: #4a4a4a;
+        color: white;
+    }
+
+
+.button-clean {
+    background-color: #4a90e2; /* Modrá, mùžeš zmìnit */
+    color: white;
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 0.5em;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .button-clean:hover {
+        background-color: #357ABD; /* Tmavší odstín pro hover */
+    }

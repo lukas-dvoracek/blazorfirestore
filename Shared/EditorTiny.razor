@@ -3,35 +3,35 @@
 @using global::Shared
 @inject KeyService KeyService
 
-<h3>API Klíče</h3>
+@* <h3>API Klíče</h3> *@
 
+@*
 @if (keys == null)
 {
     <p>Načítám klíče...</p>
 }
 else
 {
-    @* <p>Firebase API Key: @keys.FB_API_KEY</p> *@
-    @* <p>TinyMCE Key: @keys.TINYMCE_API_KEY</p> *@
+    <p>Firebase API Key: @keys.FB_API_KEY</p>
+    <p>TinyMCE Key: @keys.TINYMCE_API_KEY</p>
     <p>Firebase API Key: načteno</p>
     <p>TinyMCE Key: načteno</p>
 }
+*@
 
-
-<h3>TinyMCE v Blazor WASM</h3>
+@* <h3>TinyMCE v Blazor WASM</h3> *@
 <a href="https://www.tiny.cloud/docs/tinymce/latest/blazor-ref/#component-binding">Nastavení TinyMCE v Blazoru</a>
+<br />
 <a href="https://www.tiny.cloud/docs/tinymce/latest/customize-ui/">Změna vzhledu</a>
 
-
-
-@if (keys != null)
-{
+@* @if (keys != null)
+{ *@
     <div class="editor" id="left">
     <Editor @bind-Value="Content"
             Id="tinymceEditor"
             @* ApiKey="@keys.TINYMCE_API_KEY" *@
             Inline=false
-            CloudChannel="7"
+            @* CloudChannel="7" *@
             Disable=false
             ClassName="tinymce-wrapper"
             JsConfSrc="config"
@@ -42,33 +42,40 @@ else
     <div class="editor" id="right">
         @* sem přijde náhled obsahu*@
     </div>
-    <button @onclick="SaveContent">Náhled</button>
-    <button @onclick="SaveContent">Uložit</button>
-    <button @onclick="CancelEdit">Zrušit editaci</button>
+    <button @onclick="SaveContent" class="button-minimal">Náhled</button>
+    <button @onclick="SaveContent" class="button-minimal">Uložit</button>
+    <button @onclick="CancelEdit" class="button-clean">Zrušit editaci</button>
+@*
 }
 else
 {
     <p>Načítání editoru...</p>
 }
+*@
 
 
 @code {
 
-    private ApiKeys? keys;
+    // private ApiKeys? keys;
     // private string text = "<p>Ahoj světe!</p>";
-    private bool keysLoaded = false;
+    // private bool keysLoaded = false;
 
 
     protected override async Task OnInitializedAsync()
     {
-        keys = await KeyService.GetKeysAsync();
-        keysLoaded = true;
+        // keys = await KeyService.GetKeysAsync();
+        // keysLoaded = true;
+        if (Content == null)
+        {
+            Content = "";
+        }
         StateHasChanged(); // Přinutí komponentu k novému renderu
     }
 
     [Parameter] public string? Content { get; set; }
     [Parameter] public EventCallback<string> OnContentChanged { get; set; }
     [Parameter] public EventCallback<Boolean> OnCancel { get; set; }
+
 
     private void SaveContent()
     {
