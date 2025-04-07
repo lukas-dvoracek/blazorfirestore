@@ -29,15 +29,15 @@ else
     <div class="editor" id="left">
     <Editor @bind-Value="Content"
             Id="tinymceEditor"
-            ApiKey="@keys.TINYMCE_API_KEY"
+            @* ApiKey="@keys.TINYMCE_API_KEY" *@
             Inline=false
             CloudChannel="7"
             Disable=false
             ClassName="tinymce-wrapper"
             JsConfSrc="config"
             @* Conf="@yourConf" *@
-            @* LicenseKey="your-license-key" *@
-            @* ScriptSrc="config" *@ />
+            LicenseKey="gpl"
+            ScriptSrc="/js/tinymce/tinymce.min.js" />
     </div>
     <div class="editor" id="right">
         @* sem přijde náhled obsahu*@

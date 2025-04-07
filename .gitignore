@@ -480,3 +480,5 @@ $RECYCLE.BIN/
 appsettings.json
 nastav-apikeys.conf
 functions/index-bac.js
+
+*.zip
