@@ -29,6 +29,7 @@ window.config = {
     language: 'cs',
     toolbar: 'undo redo | bold italic',
     promotion: false,
+    statusbar: false,
     //skin: 'oxide-dark',
     //content_css: 'dark'
     skin: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide'),
