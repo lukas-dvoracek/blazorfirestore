@@ -27,9 +27,10 @@ window.config = {
     height: 300,
     editor_selector: "tinymceEditor",
     language: 'cs',
-    toolbar: 'undo redo | bold italic',
+    plugins: 'wordcount',
+    toolbar: 'undo redo | bold italic | wordcount',
     promotion: false,
-    statusbar: false,
+    //statusbar: false,
     //skin: 'oxide-dark',
     //content_css: 'dark'
     skin: (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'oxide-dark' : 'oxide'),
