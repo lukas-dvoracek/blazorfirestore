@@ -56,9 +56,11 @@ else
     // dát  do BookEditPage
     private async Task HandleContentChange(string newContent)
     {
+        book.Content = newContent;
         text = newContent;
         content = text;
         await ConvertToPlainText(text);
+        EditContent(false);
     }
     private async Task HandleCancel()
     {
@@ -70,6 +72,7 @@ else
     private void SaveContent()
     {
         OnContentChanged.InvokeAsync(Content);
+        book.Content = Content;
     }
 
 }

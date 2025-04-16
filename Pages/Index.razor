@@ -12,8 +12,14 @@ Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
-
-<EditorTiny Content=@content OnContentChanged=HandleContentChange></EditorTiny>
+@if (!IsEditing)
+{
+	<button @onclick="() => EditContent(true)">Editovat</button>
+}
+else
+{
+	<EditorTiny Content=@content OnContentChanged=HandleContentChange OnCancel=HandleCancel></EditorTiny>
+}
 
 @* <textarea Id="tinymceEditor"></textarea> *@
 <!-- Zobrazení aktuálního obsahu -->
@@ -39,64 +45,72 @@ Welcome to your new app.
 
 
 @code {
-    private ApiKeys? keys;
-    private bool keysLoaded = false;
-    private string text = "<p>Ahoj světe!</p>";
-    private string content = "<p>Hello world</p>";
-    private string plainText = "";
+	private ApiKeys? keys;
+	private bool keysLoaded = false;
+	private string text = "<p>Ahoj světe!</p>";
+	private string content = "<p>Hello world</p>";
+	private string plainText = "";
+	private bool IsEditing = false;
 
-    private void OnTextChanged(string newText)
-    {
-        text = newText;
-    }
+	private void OnTextChanged(string newText)
+	{
+		text = newText;
+	}
 
-    protected override async Task OnInitializedAsync()
-    {
-        keys = await KeyService.GetKeysAsync();
-        Environment.SetEnvironmentVariable("FBAPIKey", keys.FB_API_KEY);
-        keysLoaded = true;
-        StateHasChanged(); // Přinutí komponentu k novému renderu
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		keys = await KeyService.GetKeysAsync();
+		Environment.SetEnvironmentVariable("FBAPIKey", keys.FB_API_KEY);
+		keysLoaded = true;
+		StateHasChanged(); // Přinutí komponentu k novému renderu
+	}
 
-    // Tato metoda bude volána z JavaScriptu
-    [JSInvokable]
-    public static void OnEditorContentChanged(string content)
-    {
-        // Můžete provádět jakékoliv operace s obsahem, např. uložení nebo zobrazení
-        Console.WriteLine("Editor content changed: " + content);
-    }
+	// Tato metoda bude volána z JavaScriptu
+	[JSInvokable]
+	public static void OnEditorContentChanged(string content)
+	{
+		// Můžete provádět jakékoliv operace s obsahem, např. uložení nebo zobrazení
+		Console.WriteLine("Editor content changed: " + content);
+	}
 
-    private async Task ConvertToPlainText(string text)
-    {
-        plainText = await JS.InvokeAsync<string>("stripHtml", text);
-    }
+	private async Task ConvertToPlainText(string text)
+	{
+		plainText = await JS.InvokeAsync<string>("stripHtml", text);
+	}
 
-    private async Task SaveContent()
-    {
-        // TODO
-        // Předpokládáme, že text je již upravený ve "text" proměnné
-        // await SomeService.SaveContentAsync(text);  // Uložení do databáze nebo jiného úložiště        
-        // var content = await JS.InvokeAsync<string>("getTinyMCEContent", "tinymceEditor");
-        text = @content;
-        await ConvertToPlainText(text);
+	private async Task SaveContent()
+	{
+		// TODO
+		// Předpokládáme, že text je již upravený ve "text" proměnné
+		// await SomeService.SaveContentAsync(text);  // Uložení do databáze nebo jiného úložiště        
+		// var content = await JS.InvokeAsync<string>("getTinyMCEContent", "tinymceEditor");
+		text = @content;
+		await ConvertToPlainText(text);
 
-    }
+	}
 
-    private async Task HandleContentChange(string newContent)
-    {
-        text = newContent;
-        content = text;
-        await ConvertToPlainText(text);
-    }
+	private async Task HandleContentChange(string newContent)
+	{
+		text = newContent;
+		content = text;
+		await ConvertToPlainText(text);
+		EditContent(false);
+	}
 
-    [Inject] IJSRuntime JS { get; set; }
+	[Inject] IJSRuntime JS { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        // if (keysLoaded && keys != null)
-        // //if (firstRender)
-        // {
-        //     await JS.InvokeVoidAsync("initTinyMCE", "tinymceEditor", @keys.TINYMCE_API_KEY);
-        // }
-    }
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		// if (keysLoaded && keys != null)
+		// //if (firstRender)
+		// {
+		//     await JS.InvokeVoidAsync("initTinyMCE", "tinymceEditor", @keys.TINYMCE_API_KEY);
+		// }
+	}
+	private async Task HandleCancel()
+	{
+		EditContent(false);
+	}
+	
+	private void EditContent(Boolean editing = true) => IsEditing = editing;
 }
