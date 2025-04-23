@@ -1,4 +1,4 @@
-@page "/users"
+﻿@page "/users"
 @using global::Services
 @using static global::Shared.Objects
 @inject FirestoreService FirestoreService
@@ -7,37 +7,72 @@
 @inject IJSRuntime JS
 
 <!-- Displays the title "Firebase" -->
-<h1> U�ivatel� </h1>
+<h1 class="mb-4">👥 Seznam uživatelů</h1>
 
 <!-- Input box to add a new user -->
-<div>
-    <!-- Binds the currentUser variable to the input box -->
-    <input @bind=@currentUser placeholder="User Name" />
-    <input @bind=@currentUserRole placeholder="Role" />
-    <!-- Binds the AddUser method to the button -->
-    <button @onclick="AddUser">Add</button>
+@* <div> *@
+@*     <!-- Binds the currentUser variable to the input box --> *@
+@*     <input @bind=@currentUser placeholder="User Name" /> *@
+@*     <input @bind=@currentUserRole placeholder="Role" /> *@
+@*     <!-- Binds the AddUser method to the button --> *@
+@*     <button @onclick="AddUser">Add</button> *@
+@* </div> *@
+@* <br /> *@
+
+<div class="mb-4">
+    <label for="roleFilter" class="form-label">Filtrovat podle role:</label>
+    <select id="roleFilter" class="form-select" onchange="filterUsers()">
+        <option value="all">Všechny role</option>
+        <option value="admin">Administrátor</option>
+        <option value="editor">Redaktor</option>
+        <option value="user">Čtenář</option>
+        <option value="mod">Moderátor</option>
+    </select>
 </div>
-<br />
 
 <!-- Displays the list of users if isLoading is false -->
 @if (!isLoading)
-{
+{    
+    <div id="userList" class="row g-3">
     <!-- Loops through the userList -->
     @foreach(var user in userList)
     {
-        <div>
-            <!-- Displays the user's name -->
-            <a href="@($"user/{user.Id}")">@user.UserName</a> - @user.UserRole
-            <!-- Binds the DeleteUser method to the delete button -->
-            <button @onclick="()=>DeleteUser(user.Id!)"> Del</button>
-        </div>
-        <br/>
+            <div class="col-md-6 user-item" data-role=@user.UserRole>
+                <div class="card user-card p-3 h-100">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div class="me-3 flex-grow-1 break-word">
+                            <h5 class="card-title text-truncate" style="max-width: 100%;">@user.UserName</h5>
+                            <p class="card-text text-muted mb-0">@user.UserRole</p>
+                        </div>
+                        <a href="@($"user/{user.Id}")" class="btn btn-outline-primary mt-1 flex-shrink-0">Detail</a>
+
+                            @* <button @onclick="() => DeleteUser(user.Id!)"> Del</button> *@
+                    </div>
+                </div>
+            </div>
+
+            @* Displays the user's name  *@
+            @* <a href="@($"user/{user.Id}")">@user.UserName</a> - @user.UserRole *@
+            @* Binds the DeleteUser method to the delete button  *@
+            @* <button @onclick="()=>DeleteUser(user.Id!)"> Del</button> *@   
     } 
+    </div>
 }
 else
 {
     <p>Loading...</p>
 }
+
+<script>
+    function filterUsers() {
+        const selectedRole = document.getElementById('roleFilter').value;
+        const users = document.querySelectorAll('.user-item');
+        users.forEach(user => {
+            const role = user.getAttribute('data-role');
+            user.style.display = (selectedRole === 'all' || role === selectedRole) ? 'block' : 'none';
+        });
+    }
+</script>
 
 @code {
     // A list of User objects to store the users

@@ -132,3 +132,13 @@ a, .btn-link {
     .button-clean:hover {
         background-color: #357ABD; /* Tmavší odstín pro hover */
     }
+
+.user-card {
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+.break-word {
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
