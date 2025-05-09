@@ -6,6 +6,6 @@ with:
 
 TinyMCE
 
-FontAwesome
+Bootstrap
 
 (.NET 9)

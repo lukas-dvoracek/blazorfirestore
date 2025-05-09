@@ -50,6 +50,26 @@
     color: white;
 }
 
+.logo {
+    font-family: 'Manrope', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+}
+
+.cursor {
+    display: inline-block;
+    margin-left: 2px;
+    animation: blink 1s step-start infinite;
+    color: aliceblue;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
