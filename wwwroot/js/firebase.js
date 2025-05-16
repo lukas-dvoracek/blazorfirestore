@@ -5,6 +5,7 @@
         addDoc,
         getDocs,
         getDoc,
+        setDoc,
         deleteDoc,
         doc,
         query, 
@@ -37,8 +38,8 @@
     window.addUser = async (user) => {
       try {
           const docRef = await addDoc(collection(db, "users"), {
-              DisplayName: user.displayName,
-              Role: user.role
+              DisplayName: user.DisplayName,
+              Role: user.Role
         });
       } catch (e) {
         console.error("Error adding document: ", e);
@@ -50,9 +51,9 @@
         try {
             const querySnapshot = await getDocs(collection(db, "users"));
             let dataArray = querySnapshot.docs.map((doc) => ({
-                id: doc.id,
-                userName: doc.get("DisplayName"),
-                userRole: doc.get("Role"),
+                Id: doc.id,
+                UserName: doc.get("DisplayName"),
+                UserRole: doc.get("Role"),
             }));
             return dataArray;
         } catch (e) {
@@ -95,6 +96,20 @@
       } catch (e) {
         console.error("Error deleting document: ", e);
       }
+    };
+
+    window.updateUser = async (user) => {
+        try {
+            const docRef = doc(db, "users", user.Id);
+            await setDoc(docRef, {
+                DisplayName: user.UserName,
+                Role: user.UserRole
+            }, { merge: true });
+            return true;
+        } catch (e) {
+            console.error("Chyba při aktualizaci uživatele: ", e);
+            return false;
+        }
     };
 
     // funkce pro zobrazení seznamu knih/postů
@@ -167,3 +182,38 @@
             return null;
         }
     };
+
+// Přidání nové knihy
+window.addBook = async (book) => {
+    try {
+        const docRef = await addDoc(collection(db, "posts"), {
+            Title: book.Title,
+            user: book.AuthorId,
+            Content: book.Content,
+            Genre: book.Genre ?? "",
+            published: true
+        });
+        return docRef.id;
+    } catch (e) {
+        console.error("Chyba při přidávání knihy: ", e);
+        return null;
+    }
+};
+
+// Editace (aktualizace) knihy
+window.updateBook = async (book) => {
+    try {
+        const docRef = doc(db, "posts", book.Id);
+        await setDoc(docRef, {
+            Title: book.Title,
+            user: book.AuthorId,
+            Content: book.Content,
+            Genre: book.Genre ?? "",
+            published: true
+        }, { merge: true });
+        return true;
+    } catch (e) {
+        console.error("Chyba při aktualizaci knihy: ", e);
+        return false;
+    }
+};

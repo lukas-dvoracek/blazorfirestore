@@ -84,7 +84,7 @@ else
 		// Předpokládáme, že text je již upravený ve "text" proměnné
 		// await SomeService.SaveContentAsync(text);  // Uložení do databáze nebo jiného úložiště        
 		// var content = await JS.InvokeAsync<string>("getTinyMCEContent", "tinymceEditor");
-		text = @content;
+		text = content;
 		await ConvertToPlainText(text);
 
 	}

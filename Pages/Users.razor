@@ -97,7 +97,7 @@ else
     private async Task DeleteUser(string userId)
     {
         await FirestoreService.DeleteUserAsync(userId);
-        await FirestoreService.GetUsersAsync();
+        userList = await FirestoreService.GetUsersAsync();
         // Removes the user from the userList
         // userList = userList.Where(i => i.Id != userId).ToList();
         // Invokes a JavaScript function to delete the user from Firebase
