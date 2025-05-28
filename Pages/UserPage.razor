@@ -35,13 +35,19 @@ else
     [Parameter] public string Id { get; set; }
     private User user;
     private List<Book> books = new();
-
-        
-
+           
     protected override async Task OnInitializedAsync()
     {
         user = await FirestoreService.GetUserByIdAsync(Id);
         books = await FirestoreService.GetBooksByUserIdAsync(Id);
     }
 
+    private async Task SaveUserEdit()
+    {
+        var success = await FirestoreService.UpdateUserAsync(user);
+        if (success)
+        {
+            // např. zobrazit zprávu, aktualizovat seznam, zavřít dialog apod.
+        }
+    }
 }

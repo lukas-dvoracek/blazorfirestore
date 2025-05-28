@@ -35,8 +35,34 @@ namespace Services
             await _jsRuntime.InvokeVoidAsync("deleteUser", userId);
         }
 
+		// Vytvoření nové knihy
+		public async Task<string?> AddBookAsync(Book book)
+		{
+			// TODO : Přidat validaci pro knihu, např. zkontrolovat, zda jsou vyplněny všechny povinné údaje
+			// book.Id bude null, Firestore vygeneruje nové ID
+			return await _jsRuntime.InvokeAsync<string>("addBook", book);
+		}
 
-        public async Task<List<Book>> GetBooksAsync()
+		// Editace (aktualizace) knihy
+		public async Task<bool> UpdateBookAsync(Book book)
+		{   // TODO : Přidat validaci pro knihu, např. zkontrolovat, zda jsou vyplněny všechny povinné údaje
+			// book.Id musí být vyplněno
+			return await _jsRuntime.InvokeAsync<bool>("updateBook", book);
+		}
+		
+		public async Task<bool> UpdateUserAsync(User user)
+		{
+			// TODO : Přidat validaci pro uživatele, např. zkontrolovat, zda jsou vyplněny všechny povinné údaje
+			// user.Id, user.UserName, user.UserRole musí být vyplněny
+			return await _jsRuntime.InvokeAsync<bool>("updateUser", user);
+		}
+
+		public async Task<bool> DeleteBookAsync(string bookId)
+		{
+			return await _jsRuntime.InvokeAsync<bool>("deleteBook", bookId);
+		}
+
+		public async Task<List<Book>> GetBooksAsync()
         {
             var books = await _jsRuntime.InvokeAsync<Book[]>("getBooks");
             var users = await GetUsersDictionaryAsync(); // Načti všechny uživatele do slovníku

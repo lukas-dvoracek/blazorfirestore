@@ -19,6 +19,9 @@
     else
     {
         <EditorTiny Content=@content OnContentChanged=HandleContentChange OnCancel=HandleCancel></EditorTiny>
+
+
+
     }
 
 }
@@ -73,6 +76,31 @@ else
     {
         OnContentChanged.InvokeAsync(Content);
         book.Content = Content;
+    }
+
+	private Book newBook = new Book(); // KONTROLA, zda již existuje kniha s tímto ID, atd.
+
+    private async Task CreateBook()
+    {
+		// TODO: Získat data z formuláře
+        var newId = await FirestoreService.AddBookAsync(newBook);
+        // případně přesměrovat nebo zobrazit zprávu
+    }
+
+    private async Task UpdateBook()
+    {
+		// TODO : Získat data z formuláře
+        var success = await FirestoreService.UpdateBookAsync(newBook);
+        // případně přesměrovat nebo zobrazit zprávu
+    }
+
+    private async Task DeleteBook(string bookId)
+    {
+        var success = await FirestoreService.DeleteBookAsync(bookId);
+        if (success)
+        {
+            // Aktualizace seznamu, přesměrování nebo zobrazení zprávy
+        }
     }
 
 }

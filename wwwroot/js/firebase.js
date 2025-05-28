@@ -172,7 +172,7 @@
                 Id: doc.id,
                 Title: doc.get("Title"),
                 AuthorId: doc.get("user"),
-                //published: doc.get("published"),
+                Published: doc.get("published"),
                 Content: doc.get("Content"),
             }));
 
@@ -183,37 +183,63 @@
         }
     };
 
-// Přidání nové knihy
-window.addBook = async (book) => {
-    try {
-        const docRef = await addDoc(collection(db, "posts"), {
-            Title: book.Title,
-            user: book.AuthorId,
-            Content: book.Content,
-            Genre: book.Genre ?? "",
-            published: true
-        });
-        return docRef.id;
-    } catch (e) {
-        console.error("Chyba při přidávání knihy: ", e);
-        return null;
-    }
-};
+    // Přidání nové knihy
+    window.addBook = async (book) => {
+        try {
+            const docRef = await addDoc(collection(db, "posts"), {
+                Title: book.Title,
+                User: book.AuthorId,
+                Content: book.Content,
+                Genre: book.Genre ?? "",
+                Published: book.Published
+            });
+            return docRef.id;
+        } catch (e) {
+            console.error("Chyba při přidávání knihy: ", e);
+            return null;
+        }
+    };
 
-// Editace (aktualizace) knihy
-window.updateBook = async (book) => {
-    try {
-        const docRef = doc(db, "posts", book.Id);
-        await setDoc(docRef, {
-            Title: book.Title,
-            user: book.AuthorId,
-            Content: book.Content,
-            Genre: book.Genre ?? "",
-            published: true
-        }, { merge: true });
-        return true;
-    } catch (e) {
-        console.error("Chyba při aktualizaci knihy: ", e);
-        return false;
-    }
+    // Editace (aktualizace) knihy
+    window.updateBook = async (book) => {
+        try {
+            const docRef = doc(db, "posts", book.Id);
+            await setDoc(docRef, {
+                Title: book.Title,
+                User: book.AuthorId,
+                Content: book.Content,
+                Genre: book.Genre ?? "",
+                Published: book.Published
+            }, { merge: true });
+            return true;
+        } catch (e) {
+            console.error("Chyba při aktualizaci knihy: ", e);
+            return false;
+        }
+
+    window.updateUser = async (user) => {
+        try {
+            // TODO: Přidat kontrolu, zda uživatel existuje
+            const docRef = doc(db, "users", user.Id);
+            await setDoc(docRef, {
+                DisplayName: user.UserName,
+                Role: user.UserRole
+            }, { merge: true });
+            return true;
+        } catch (e) {
+            console.error("Chyba při aktualizaci uživatele: ", e);
+            return false;
+        }
+        };
+    window.deleteBook = async (bookId) => {
+        try {
+            // TODO: Přidat kontrolu, zda kniha existuje
+            await deleteDoc(doc(db, "posts", bookId));
+            console.log("Kniha s ID", bookId, "byla úspěšně smazána.");
+            return true;
+        } catch (e) {
+            console.error("Chyba při mazání knihy: ", e);
+            return false;
+        }
+    };
 };
