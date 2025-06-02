@@ -19,7 +19,7 @@ namespace Shared
             public string? AuthorName { get; set; } // Jméno autora
             public string? Genre { get; set; }
 			public string? Content { get; set; }
-			public string? Published { get; set; }
+			public Boolean? Published { get; set; }
 
             
 			//public TimestampAttribute? DatePublished { get; set; }

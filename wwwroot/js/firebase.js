@@ -37,7 +37,7 @@
     // Define a function to add a new user to the Firestore database
     window.addUser = async (user) => {
       try {
-          const docRef = await addDoc(collection(db, "users"), {
+          await addDoc(collection(db, "users"), {
               DisplayName: user.DisplayName,
               Role: user.Role
         });
@@ -100,6 +100,7 @@
 
     window.updateUser = async (user) => {
         try {
+            // TODO: Přidat kontrolu, zda uživatel existuje
             const docRef = doc(db, "users", user.Id);
             await setDoc(docRef, {
                 DisplayName: user.UserName,
@@ -116,13 +117,13 @@
     window.getBooks = async () => {
         try {
             const postRef = collection(db, "posts");
-            const q = query(postRef, where("published", "==", true))
+            const q = query(postRef, where("Published", "==", true))
             const posts = await getDocs(q);
             //const querySnapshot = await getDocs(collection(db, "posts"));
             let dataArray = posts.docs.map((doc) => ({
                 Id: doc.id,
                 Title: doc.get("Title"),
-                AuthorId: doc.get("user"), // Přidáme authorId
+                AuthorId: doc.get("UserId"), // Přidáme authorId
                 Content: doc.get("Content")
             }));
             return dataArray;
@@ -142,7 +143,7 @@
                 let book = {
                     Id: docSnap.id,
                     Title: docSnap.get("Title"),
-                    AuthorId: docSnap.get("user"),
+                    AuthorId: docSnap.get("UserId"),
                     //published: docSnap.get("published"),
                     Content: docSnap.get("Content"),
                 };
@@ -162,8 +163,8 @@
         try {
             const q = query(
                 collection(db, "posts"),
-                where("user", "==", userId),
-                where("published", "==", true) // Přidána podmínka
+                where("UserId", "==", userId),
+                where("Published", "==", true) // Přidána podmínka
             );
 
             const querySnapshot = await getDocs(q);
@@ -171,9 +172,9 @@
             let books = querySnapshot.docs.map((doc) => ({
                 Id: doc.id,
                 Title: doc.get("Title"),
-                AuthorId: doc.get("user"),
-                Published: doc.get("published"),
-                Content: doc.get("Content"),
+                AuthorId: doc.get("UserId"),
+                Published: doc.get("Published"),
+                Content: doc.get("Content")
             }));
 
             return books;
@@ -188,7 +189,7 @@
         try {
             const docRef = await addDoc(collection(db, "posts"), {
                 Title: book.Title,
-                User: book.AuthorId,
+                UserId: book.AuthorId,
                 Content: book.Content,
                 Genre: book.Genre ?? "",
                 Published: book.Published
@@ -206,7 +207,7 @@
             const docRef = doc(db, "posts", book.Id);
             await setDoc(docRef, {
                 Title: book.Title,
-                User: book.AuthorId,
+                UserId: book.AuthorId,
                 Content: book.Content,
                 Genre: book.Genre ?? "",
                 Published: book.Published
@@ -216,21 +217,8 @@
             console.error("Chyba při aktualizaci knihy: ", e);
             return false;
         }
+    };
 
-    window.updateUser = async (user) => {
-        try {
-            // TODO: Přidat kontrolu, zda uživatel existuje
-            const docRef = doc(db, "users", user.Id);
-            await setDoc(docRef, {
-                DisplayName: user.UserName,
-                Role: user.UserRole
-            }, { merge: true });
-            return true;
-        } catch (e) {
-            console.error("Chyba při aktualizaci uživatele: ", e);
-            return false;
-        }
-        };
     window.deleteBook = async (bookId) => {
         try {
             // TODO: Přidat kontrolu, zda kniha existuje
@@ -241,5 +229,36 @@
             console.error("Chyba při mazání knihy: ", e);
             return false;
         }
+     };
+
+    window.addCommentToBook = async (bookId, comment) => {
+        try {
+            const commentsRef = collection(db, "posts", bookId, "comments");
+            await addDoc(commentsRef, {
+                Text: comment.Text,
+                AuthorId: comment.AuthorId,
+                //AuthorName: comment.AuthorName,
+                CreatedAt: new Date()
+            });
+        } catch (e) {
+            console.error("Chyba při přidávání komentáře: ", e);
+            return false;
+        }
     };
-};
+
+        // Přidání tipu ke knize s ID bookId
+    window.addTipToBook = async (bookId, tip) => {
+        try {
+            const tipsRef = collection(db, "posts", bookId, "tips");
+            await addDoc(tipsRef, {
+                //Text: tip.Text,
+                AuthorId: tip.AuthorId,
+                Type: tip.Type,
+                //AuthorName: tip.AuthorName,
+                CreatedAt: new Date()
+            });
+        } catch (e) {
+            console.error("Chyba při přidávání tipu: ", e);
+            return false;
+        }
+    };

@@ -1,4 +1,4 @@
-﻿@page "/user/{id}"
+﻿@page "/user/{Id}"
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 @using Services
@@ -18,13 +18,20 @@ else
 }
 @if (books != null)
 {
-    <h4>seznam příspěvků uživatele:</h4> 
-    <ul>
-    @foreach (var book in books)
-        {
-            <li><a href="@($"book/{book.Id}")">@book.Title</a></li>
-        }
-    </ul>
+    @if (books.Count == 0)
+    {
+        <h4>Uživatel nemá žádné příspěvky.</h4>
+    }
+    else
+    {
+        <h4>seznam příspěvků uživatele:</h4> 
+        <ul>
+        @foreach (var book in books)
+            {
+                <li><a href="@($"book/{book.Id}")">@book.Title</a></li>
+            }
+            </ul>
+    }
 }
 else
 {
