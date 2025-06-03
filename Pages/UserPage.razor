@@ -5,38 +5,105 @@
 @using static global::Shared.Objects
 @inject FirestoreService FirestoreService
 
+<div class="container">
+    <div class="profile-header d-flex align-items-center">
 
 @if (user != null)
 {
-    <h1>@user.UserName</h1>
-    <p>@user.UserRole</p>
-    @* <p>seznam příspěvků uživatele:</p> *@
+        <img src="https://lh3.googleusercontent.com/a/ACg8ocJoTU391JZZNR9z25bPg4CQWBZHQyNbHUosrJaHHNNmKUMPDTe5=s260-c-no" alt="Profil autora" class="profile-pic me-4" />
+        <div>
+            <!-- Hlavička profilu -->
+            <h2 class="mb-1">@user.UserName</h2>
+            <p class="mb-1 fst-italic">„Píšu, protože nemlčet by bylo horší.“ </p>
+            <p>Fantasy | Sci-fi | Krátké povídky</p> 
+            <p>@user.UserRole</p>
+            <span class="badge bg-success me-2">35 děl</span>
+            <span class="badge bg-primary me-2">1200 přečtení</span>
+            <span class="badge bg-warning text-dark">4.7 ★</span>
+        </div>
+
 }
 else
 {
-    <p>Načítání...</p>
+        <img src="" alt="Profil autora" class="profile-pic me-4" />
+        <div>
+            <h2 class="mb-1">Načítání profilu...</h2>
+            <p class="mb-1 fst-italic">„Píšu, protože nemlčet by bylo horší.“</p>
+            <p>Fantasy | Sci-fi | Krátké povídky</p>
+            <span class="badge bg-success me-2">35 děl</span>
+            <span class="badge bg-primary me-2">1200 přečtení</span>
+            <span class="badge bg-warning text-dark">4.7 ★</span>
+        </div>
 }
+    </div>
+
 @if (books != null)
 {
     @if (books.Count == 0)
     {
-        <h4>Uživatel nemá žádné příspěvky.</h4>
+            <h4>Uživatel nevydal žádná díla.</h4>
     }
     else
     {
-        <h4>seznam příspěvků uživatele:</h4> 
-        <ul>
+        <!-- Vybraná díla -->
+        <h3 class="mb-4">Vybraná díla</h3>
+            
+        <div class="row g-4 mb-5">
         @foreach (var book in books)
+        {
+            @if (book.Selected)
+            {        
+            <div class="col-md-6 col-lg-4">
+                <div class="card work-card">
+                    <div class="card-body">
+                        @* <a href="@($"book/{book.Id}")">@book.Title</a> *@
+                        @* <h5 class="card-title">@book.Title</h5> *@
+                        <NavLink class="card-title text-decoration-none" href="@($"/book/{book.Id}")">
+                            @book.Title
+                        </NavLink>
+                        <p class="card-text">Když se noc zlomí, pravda vyjde najevo... Temná fantasy povídka o tajemném městě.</p>
+                        <span class="badge bg-secondary badge-genre">Fantasy</span>
+                        <span class="badge bg-secondary badge-genre">Horor</span>
+                    </div>
+                    <div class="card-footer text-muted d-flex justify-content-between">
+                        <small>🕒 8 min čtení</small>
+                        <small>★ 4.8 | 👁️ 230x</small>
+                    </div>
+                </div>
+            </div>
+
+
+            }                
+        }
+        </div>
+
+        <!-- Ostatní díla -->
+        <h4 class="mb-3">Všechna díla</h4>
+        <ul class="list-group mb-5">
+            @foreach (var book in books)
             {
-                <li><a href="@($"book/{book.Id}")">@book.Title</a></li>
-            }
-            </ul>
+                @if (!book.Selected)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <NavLink class="text-decoration-none" href="@($"/book/{book.Id}")">
+                            @book.Title
+                        </NavLink>
+                        <span class="text-muted small">★ 4.2 | 👁️ 95x</span>
+                    </li>
+                }
+            }    
+
+        </ul>
     }
 }
 else
 {
     <p>Načítání...</p>
 }
+
+</div>
+
+
 
 @code {
     [Parameter] public string Id { get; set; }

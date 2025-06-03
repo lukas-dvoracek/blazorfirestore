@@ -174,6 +174,7 @@
                 Title: doc.get("Title"),
                 AuthorId: doc.get("UserId"),
                 Published: doc.get("Published"),
+                Selected: doc.get("Selected"),
                 Content: doc.get("Content")
             }));
 
