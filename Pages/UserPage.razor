@@ -61,7 +61,7 @@ else
                         <NavLink class="card-title text-decoration-none" href="@($"/book/{book.Id}")">
                             @book.Title
                         </NavLink>
-                        <p class="card-text">Když se noc zlomí, pravda vyjde najevo... Temná fantasy povídka o tajemném městě.</p>
+                        <p class="card-text">@book.Annotation</p>
                         <span class="badge bg-secondary badge-genre">Fantasy</span>
                         <span class="badge bg-secondary badge-genre">Horor</span>
                     </div>
