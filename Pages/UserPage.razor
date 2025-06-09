@@ -5,8 +5,10 @@
 @using static global::Shared.Objects
 @inject FirestoreService FirestoreService
 
-<div class="container">
-    <div class="profile-header d-flex align-items-center">
+<div class="work-header">
+    <div class="container">
+        @* <div class="profile-header d-flex align-items-center"> *@
+        <div class="d-flex align-items-center">
 
 @if (user != null)
 {
@@ -35,8 +37,10 @@ else
             <span class="badge bg-warning text-dark">4.7 ★</span>
         </div>
 }
-    </div>
-
+        </div>
+    </div>    
+</div>
+<div class="container">
 @if (books != null)
 {
     @if (books.Count == 0)

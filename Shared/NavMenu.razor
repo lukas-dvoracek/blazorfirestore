@@ -39,21 +39,89 @@
         @*         <span class="oi oi-plus" aria-hidden="true"></span> Counter *@
         @*     </NavLink> *@
         @* </div> *@
-        @* <div class="nav-item px-3"> *@
-        @*     <NavLink class="nav-link" href="fetchdata"> *@
-        @*         <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data *@
-        @*     </NavLink> *@
-        @* </div> *@
+        <div class="nav-item px-3 dropdown">
+            <NavLink class="nav-link" @onclick="() => expandSubNavSettings = !expandSubNavSettings">
+                <span class="oi oi-list-rich ms-2" aria-hidden="true"></span> Fetch data
+            </NavLink>
+            @if (expandSubNav)
+            {
+                <NavLink class="expand-menu" href="">
+                    <span>Sub1</span>
+                </NavLink>
+                <NavLink class="" href="">
+                    <span>Sub2</span>
+                </NavLink>
+            }
+        </div>
+        @* <!-- Nová položka s dropdownem -->
+        <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="submenuDropdown" role="button"
+               data-bs-toggle="dropdown" aria-expanded="false">
+                Nástroje
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="submenuDropdown">
+                <li>
+                    <NavLink class="dropdown-item" href="/tools/editor">Editor</NavLink>
+                </li>
+                <li>
+                    <NavLink class="dropdown-item" href="/tools/analyzer">Analyzátor</NavLink>
+                </li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
+                <li>
+                    <NavLink class="dropdown-item" href="/tools/settings">Nastavení</NavLink>
+                </li>
+            </ul>
+        </div>
+
+        <li class="nav-item dropdown show">
+            <NavLink class="nav-link dropdown-toggle" @onclick="() => expandSubNavSettings = !expandSubNavSettings" id="navbarDropdown">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Menu III
+            </NavLink>
+            @if (expandSubNavSettings)
+            {
+            <li class="dropdown-menu show" aria-labelledby="navbarDropdown" @onclick="() => expandSubNavSettings = !expandSubNavSettings">
+            <li class="nav-item">
+                <NavLink class="nav-link text-dark" href="fetchdata">
+                    <span class="oi oi-fork" aria-hidden="true"></span> Fetch
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-dark" href="counter">
+                    <span class="oi oi-command" aria-hidden="true"></span> Counter
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <NavLink class="nav-link text-dark" href="home">
+                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </li>
+            </li>
+        }
+        </li> *@
+
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
+    private bool expandSubNav;
+    private bool expandSubNavSettings;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    // private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null; 
+    
+    string baseMenuClass = "navbar-collapse d-sm-inline-flex flex-sm-row-reverse";
+
+    string NavMenuCssClass => baseMenuClass + (collapseNavMenu ? " collapse" : "");
+
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        if (!expandSubNavSettings)
+        {
+            collapseNavMenu = !collapseNavMenu;
+        }
     }
 }
