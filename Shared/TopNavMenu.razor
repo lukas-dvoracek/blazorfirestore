@@ -1,0 +1,281 @@
+﻿@* TopMenu.razor *@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <!-- Logo/Brand -->
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-home me-2"></i>piseme.online<span>|</span>
+        </a>
+
+        <!-- Mobile menu toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <!-- Domů -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="fas fa-home me-1"></i>Domů
+                    </a>
+                </li>
+
+                <!-- Produkty dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-box me-1"></i>Produkty
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/produkty/katalog"><i class="fas fa-list me-2"></i>Katalog produktů</a></li>
+                        <li><a class="dropdown-item" href="/produkty/novinky"><i class="fas fa-star me-2"></i>Novinky</a></li>
+                        <li><a class="dropdown-item" href="/produkty/slevy"><i class="fas fa-percent me-2"></i>Slevy</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/produkty/oblibene"><i class="fas fa-heart me-2"></i>Oblíbené</a></li>
+                    </ul>
+                </li>
+
+                <!-- Služby dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-cogs me-1"></i>Služby
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/sluzby/konzultace"><i class="fas fa-comments me-2"></i>Konzultace</a></li>
+                        <li><a class="dropdown-item" href="/sluzby/podpora"><i class="fas fa-life-ring me-2"></i>Technická podpora</a></li>
+                        <li><a class="dropdown-item" href="/sluzby/skoleni"><i class="fas fa-graduation-cap me-2"></i>Školení</a></li>
+                    </ul>
+                </li>
+
+                <!-- O nás dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-info-circle me-1"></i>O nás
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/o-nas/historie"><i class="fas fa-history me-2"></i>Historie společnosti</a></li>
+                        <li><a class="dropdown-item" href="/o-nas/tym"><i class="fas fa-users me-2"></i>Náš tým</a></li>
+                        <li><a class="dropdown-item" href="/o-nas/mise"><i class="fas fa-bullseye me-2"></i>Mise a vize</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/o-nas/kariera"><i class="fas fa-briefcase me-2"></i>Kariéra</a></li>
+                    </ul>
+                </li>
+
+                <!-- Kontakt -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/kontakt">
+                        <i class="fas fa-envelope me-1"></i>Kontakt
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right side menu -->
+            <ul class="navbar-nav">
+                <!-- Search -->
+                <li class="nav-item">
+                    <form class="d-flex me-2" @onsubmit="HandleSearch" @onsubmit:preventDefault="true">
+                        <input class="form-control form-control-sm me-2" type="search"
+                               placeholder="Hledat..." @bind="searchQuery" @bind:event="oninput">
+                        <button class="btn btn-outline-light btn-sm" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </li>
+
+                <!-- User dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user me-1"></i>Uživatel
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profil"><i class="fas fa-user-circle me-2"></i>Můj profil</a></li>
+                        <li><a class="dropdown-item" href="/nastaveni"><i class="fas fa-cog me-2"></i>Nastavení</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/odhlasit"><i class="fas fa-sign-out-alt me-2"></i>Odhlásit se</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+@* TopMenu.razor *@ 
+@* <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <!-- Logo/Brand -->
+        <a class="navbar-brand" href="/">
+            @* <i class="fas fa-home me-2"></i>Moje Aplikace *@
+            @*<i class="fas fa-home me-2"></i>piseme.online<span class="cursor">|</span>
+        </a>
+
+        <!-- Mobile menu toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <!-- Domů -->
+                <li class="nav-item">
+                    <a class="nav-link @(IsActive("/") ? "active" : "")" href="/">
+                        <i class="fas fa-home me-1"></i>Domů
+                    </a>
+                </li>
+
+                <!-- Produkty dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle @(IsActive("/produkty") ? "active" : "")" 
+                       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-box me-1"></i>Produkty
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/produkty/katalog">
+                            <i class="fas fa-list me-2"></i>Katalog produktů</a></li>
+                        <li><a class="dropdown-item" href="/produkty/novinky">
+                            <i class="fas fa-star me-2"></i>Novinky</a></li>
+                        <li><a class="dropdown-item" href="/produkty/slevy">
+                            <i class="fas fa-percent me-2"></i>Slevy</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/produkty/oblibene">
+                            <i class="fas fa-heart me-2"></i>Oblíbené</a></li>
+                    </ul>
+                </li>
+
+                <!-- Služby dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle @(IsActive("/sluzby") ? "active" : "")" 
+                       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cogs me-1"></i>Služby
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/sluzby/konzultace">
+                            <i class="fas fa-comments me-2"></i>Konzultace</a></li>
+                        <li><a class="dropdown-item" href="/sluzby/podpora">
+                            <i class="fas fa-life-ring me-2"></i>Technická podpora</a></li>
+                        <li><a class="dropdown-item" href="/sluzby/skoleni">
+                            <i class="fas fa-graduation-cap me-2"></i>Školení</a></li>
+                    </ul>
+                </li>
+
+                <!-- O nás dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle @(IsActive("/o-nas") ? "active" : "")" 
+                       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-info-circle me-1"></i>O nás
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/o-nas/historie">
+                            <i class="fas fa-history me-2"></i>Historie společnosti</a></li>
+                        <li><a class="dropdown-item" href="/o-nas/tym">
+                            <i class="fas fa-users me-2"></i>Náš tým</a></li>
+                        <li><a class="dropdown-item" href="/o-nas/mise">
+                            <i class="fas fa-bullseye me-2"></i>Mise a vize</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/o-nas/kariera">
+                            <i class="fas fa-briefcase me-2"></i>Kariéra</a></li>
+                    </ul>
+                </li>
+
+                <!-- Kontakt -->
+                <li class="nav-item">
+                    <a class="nav-link @(IsActive("/kontakt") ? "active" : "")" href="/kontakt">
+                        <i class="fas fa-envelope me-1"></i>Kontakt
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right side menu -->
+            <ul class="navbar-nav">
+                <!-- Search -->
+                <li class="nav-item">
+                    <form class="d-flex me-2" @onsubmit="HandleSearch" @onsubmit:preventDefault="true">
+                        <input class="form-control form-control-sm me-2" type="search" 
+                               placeholder="Hledat..." @bind="searchQuery" @bind:event="oninput">
+                        <button class="btn btn-outline-light btn-sm" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </li>
+
+                <!-- User dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" 
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user me-1"></i>Uživatel
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profil">
+                            <i class="fas fa-user-circle me-2"></i>Můj profil</a></li>
+                        <li><a class="dropdown-item" href="/nastaveni">
+                            <i class="fas fa-cog me-2"></i>Nastavení</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/odhlasit"> 
+                        @* <li><a class="dropdown-item" href="/odhlasit" @onclick="HandleLogout">
+                            <i class="fas fa-sign-out-alt me-2"></i>Odhlásit se</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav> *@
+
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@inject NavigationManager Navigation
+
+@code {
+    private string searchQuery = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    private bool IsActive(string path)
+    {
+        if (Navigation == null)
+            return false;
+
+        var currentPath = Navigation.ToBaseRelativePath(Navigation.Uri);
+
+        // Speciální případ pro domovskou stránku
+        if (path == "/" && (string.IsNullOrEmpty(currentPath) || currentPath == "/"))
+            return true;
+
+        // Pro ostatní cesty
+        if (path != "/" && !string.IsNullOrEmpty(currentPath))
+            return currentPath.StartsWith(path.TrimStart('/'), StringComparison.OrdinalIgnoreCase);
+
+        return false;
+    }
+
+    private void HandleSearch()
+    {
+        if (!string.IsNullOrWhiteSpace(searchQuery))
+        {
+            Navigation.NavigateTo($"/hledat?q={Uri.EscapeDataString(searchQuery)}");
+            searchQuery = string.Empty;
+        }
+    }
+
+    private void HandleLogout()
+    {
+        // Zde implementujte logiku pro odhlášení
+        // Například vymazání tokenů, session, atd.
+        Navigation.NavigateTo("/");
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}
